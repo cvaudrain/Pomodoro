@@ -5,7 +5,7 @@ var running = false; /* use this var to toggle when timer is running or not. Thi
 start button click event, so that you can't mash the button and run the countdown function over and over to break it.  */
 //pause button function
 function pauseToggle(){
-  if (paused == false){
+  if (paused == false && running == true){
 running = false;
   paused = true;
   $('#pause').html("Resume");
