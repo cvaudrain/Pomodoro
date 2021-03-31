@@ -1,0 +1,76 @@
+/* *{ border: 1px solid yellow;} */
+
+body{
+  text-align: center;
+}
+.row{
+  background-color: #9e3f33;
+}
+#Footer {
+  color: white;
+  font-family: 'Acme', sans-serif;
+  font-size: 0.8rem;
+  text-align: center;
+  background-color: #9e3f33;
+  padding-top: 250px;
+  padding-bottom: 0;
+
+}
+
+#Title{
+  font-family: 'Lobster', cursive;
+  text-align: center;
+  font-size: 5rem;
+  color: #9e3f33;
+  background-color: #fff
+}
+@media(max-width: 768px){
+  #Title{
+    font-size: 3.3rem;
+  }
+}
+#Pomo{
+  position: relative;
+  z-index: 0;
+  width: 280px;
+}
+
+#timer{
+  position: relative;
+  bottom: 12rem;
+  left: 0.7rem;
+  font-size: 3.5rem;
+  font-family:'Acme', sans-serif;
+  color: white;
+  text-shadow: 0 0 3px black;
+  padding: 50px;
+  padding-bottom: 0;
+      text-shadow: 0 0 3px white;
+}
+.background{
+    background-color: #9e3f33;
+}
+.my-btn {
+  font-family: 'Acme', sans-serif;
+padding: 20px;
+margin-bottom: 10px;
+background: linear-gradient(#536162,#404040);
+color: white;
+border-radius: 50%;
+font-size: 2.8rem;
+border: 0;
+box-shadow: 0 0 5px black;
+text-shadow: 0 0 2px white;
+}
+
+@media(max-width:768px){
+  .my-btn{
+    font-size: 2rem;
+    margin-top: 25px;
+  }
+}
+
+.my-btn:hover{
+background: linear-gradient(#404040,#536162);
+  text-shadow: 0 0 5px white;
+}
