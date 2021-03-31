@@ -1,16 +1,16 @@
 var minutes = 25;
 var seconds = 0;
-var start = $("#start");
-var breakTime = $("#break")
-var pause = $("#pause");
-var reset = $("#reset");
+// var start = $("#start");
+// var breakTime = $("#break")
+// var pause = $("#pause");
+// var reset = $("#reset");
 var paused = false;
 //countdown function for start button
 
 function countdown(){
 
-  // $('#minutes').html(24);
-  // setInterval(function(){
+  setInterval(function(){
+if(paused == false && minutes + seconds > 0){
     if(seconds <=0){
       seconds = 60;
       minutes-=1;
@@ -21,24 +21,52 @@ function countdown(){
     seconds = "0" + seconds
   }
   $('#seconds').html(seconds)
-// },1000)
 }
 
+if(minutes + seconds == "000"){ //Replace with audio to be an alarm chime
+  var clearVar = setInterval(countdown,10)
+clearInterval(clearVar)
+  // reset();
+}
+},10)
+
+}
 //pause button function
-
-function pause(){
-  var run = setInterval(countdown,1000);
-  clearInterval(run);
+function pauseToggle(){
+  if (paused == false){
+  paused = true;
+  $('#pause').html("Resume");
+} else{
+  paused = false;
+  $('#pause').html("Pause");
 }
+
+}
+
+//Break Button function
+
+//Reset Button function
+function reset(){
+minutes = 25;
+$('#minutes').html(minutes)
+seconds = 0;
+$('#seconds').html(seconds)
+paused = false;
+$('#pause').html("Pause")
+}
+
 
 //Event Listeners to launch each function
+$('#reset').click(function(){
+reset();
+})
 
 $('#pause').click(function(){
-  pause()
+  pauseToggle()
 })
+
 $("#start").one("click",function(){ //Using vanilla set syntax "one",function to stop the button from running the function if clicked again.
-
-  setInterval(countdown,1000);
-  // alert("function start");
-
+if(paused == false){
+  countdown();
+}
 })
