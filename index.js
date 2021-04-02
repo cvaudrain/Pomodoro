@@ -1,169 +1,93 @@
+/* About:
+Title: Pomodoro Timer Version 2.0
+Description: A customizable timer with 25/5 work/break cycles as suggested format.
+Front End: HTML, CSS, JavaScript, jQuery
+Back End: Node.js, Express.
+Owner: Chris Vaudrain
+*/
+//Global Variables
+var chime = new Audio("sounds/jazzhop.m4a")
 var minutes = 25;
-var seconds = 0;
-var paused = false;
-var running = false;
-var btnRead = "break"
-var startClicked = false;
-
-$('#start').data('clicked', false)
-
-
-function pauseToggle(){
-  // if(running == false && paused == false){
-  //   return;
-  // }
-  if (paused == false && running == true){
-running = false;
-  paused = true;
-  $('#pause').html("Resume");
-} else if(running == false ){
-  paused = false;
-  running = true;
-  $('#pause').html("Pause");
-}
-
-}
-//break/work toggle button BEFORE timer start has been clicked
-$('#break').click(function(){
-if(startClicked == true){
-  return;
-  console.log("Clicked is TRUE 1st break version");
-}
-// else {
+var seconds = 60;
+var minPassed;
+var secPassed;
+let idVar = setInterval(count,1000) //this runs the interval on count. needs to be global so that clear(idVar) can be called from anywhere
+let onOffSwitch = clearInterval(idVar) //will be redefined to remove functionality on start. Currently holding idVar back from starting.
 //
-// }
-  if(btnRead == "break"){
-  minutes = 5;
-  $('#minutes').html(minutes)
-  seconds = 0;
-  $('#seconds').html(seconds+"0")
-  running = false;
-  paused = false;
-  $('#pause').html("Pause")
-  btnRead = "work"
-    $('#break').html("Work")
-} else{
-  console.log("btnRead not set to break")
-  minutes = 25;
-  $('#minutes').html(minutes)
-  seconds = 0;
-  $('#seconds').html(seconds+"0")
-  running = false;
-  paused = false;
-  $('#pause').html("Pause")
-  btnRead = "break"
-    $('#break').html("Break")
+//Functions
+
+function count(){ //this increments and sets the clock accordingly.
+seconds-=1;
+secpassed+=1;
+$("#Seconds").html(seconds);
+if(seconds <10){
+  $("#Seconds").html("0"+seconds);
+}
+if(seconds==0){
+  minutes -=1;
+  minPassed+=1;
+  seconds = 60; //will be decremented prior to setting the HTML onscreen, so it will go from :00 to :59 smoothly.
+}
+if(minutes+seconds == 0){
+  play(chime);
+}
 }
 
-})
-//Event Listeners to launch each function
-
-
-$('#pause').click(function(){
-  pauseToggle()
-})
-
-//start and reset must be scoped into tyhe same locality i.e this function, in order to allow clearInterval to reference let countdown. countdown is now bound to a let for this reason.
-$("#start").on("click",function(){
-  startClicked = true;
-if(paused == false &&  running == false){
-  running = true;
-  let countdown = setInterval(function(){
-  if(paused == false && minutes + seconds > 0){
-      if(seconds <=0){
-        seconds = 60;
-        minutes-=1;
-        $('#minutes').html(minutes);
-      }
-    seconds -=1
-    if(seconds<=9){ //make second format 09, 08 etc
-      seconds = "0" + seconds
-    }
-    $('#seconds').html(seconds)
-  }
-
-  if(minutes + seconds == "000"){
-  console.log("Time's up.")
-  clearInterval(countdown)
-  }
-  console.log("running")
-},1000)
-
-
-  $('#reset').click(function(){ //This event listener only works after start has been clicked. It's fine bc you wouldn't need this button if the clock was already at 25:00.
-     function reset(){
-        clearInterval(countdown);
-      if(btnRead == "break"){ //bc btn will read break if timer is currently work mode. reset() should reset timer for either one, depending.
-  minutes = 25;
-}else{
-  minutes = 5;
+function start(){
+onOffSwitch = "on"; //this is the "on" switch.
+$("#Start-pause").html("Pause");
 }
-  $('#minutes').html(minutes)
-  seconds = 0;
-  $('#seconds').html(seconds+"0")
-  running = false;
-  paused = false;
-  $('#pause').html("Pause")
 
-
+function pause(){
+onOffSwitch = clearInterval(idVar); //and the "Off" switch with the magic phrase...
+$("#Start-pause").html("Start")
 }
+
+function reset(){
+minutes+=minPassed;
+seconds+=secPassed;
+minPassed=0;
+secPassed=0;
+pause(chime);
+}
+
+function toggle(){
 reset();
-//break/work toggle button
-//
-
-})
-$('#break').click(function(){
-  console.log("second break function ran")
-  clearInterval(countdown); //stops timer running
-//Next comes reset function:
-// clearInterval(countdown);
-// if(btnRead == "break"){ //bc btn will read break if timer is currently work mode. reset() should reset timer for either one, depending.
-// minutes = 5;
-// }else{
-// minutes = 25;
-// }
-$('#minutes').html(minutes)
-seconds = 0;
-$('#seconds').html(seconds+"0")
-running = false;
-paused = false;
-$('#pause').html("Pause")
-
-  if(btnRead == "break"){
-  minutes = 5;
-  $('#minutes').html(minutes)
-  seconds = 0;
-  $('#seconds').html(seconds+"0")
-
-  $('#pause').html("Pause")
-  btnRead = "work"
-    $('#break').html("Work")
-    running = false;
-    paused = false;
-} else{
-  minutes = 25;
-  $('#minutes').html(minutes)
-  seconds = 0;
-  $('#seconds').html(seconds+"0")
-
-  $('#pause').html("Pause")
-  btnRead = "break"
-    $('#break').html("Break")
-    running = false;
-    paused = false;
+if(minutes>5){ //i.e if it's currently 25 after reset()
+  minutes=5;
+  $(#timer)
+}
+else{
+  minutes = 25
 }
 
-})
-  // })
-//
 }
 
-})
+function chime(){
+
+}
 
 
-$(document).keydown(function(){
-  console.log("Puased = "+paused)
-  console.log("Running = "+running)
-  console.log("btnRead = "+btnRead)
+//
+//Event Listeners
+$("#Start-pause").click(function(){
+  if(onOffSwitch=="on"){
+start();
+}
+else{
+  return;
+}
+});
 
-})
+// $("#Pause").click(function(){
+//
+// });
+
+$("#Toggle").click(function(){
+
+});
+
+$("#Reset").click(function(){
+
+});
+//

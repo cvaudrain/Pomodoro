@@ -10,10 +10,10 @@ app.get("/", function(req,res){
 });
 app.post("/", function(req,res){
   console.log("successfully posted to index.html")
-  
+
 });
 
 
 app.listen(3000,function(){
-  console.log("Server running on port 3000")
+  console.log("Server yeeting on port 3000")
 });
