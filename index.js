@@ -13,7 +13,7 @@ var minPassed = 0;
 // var secPassed = 0;
 var idVar = setInterval(count,1000) //this runs the interval on count. needs to be global so that clear(idVar) can be called from anywhere
 function onOffSwitch(){
-  clearInterval(idVar) //will be redefined to remove functionality on start. Currently holding idVar back from starting.MAYBE NOT.
+  clearInterval(idVar) //will be called to halt idVar.
 }
 onOffSwitch();//needs to be here or else counting starts on load.
 var status = "off";
@@ -24,7 +24,7 @@ seconds-=1;
 // secPassed+=1;
 $("#Seconds").html(seconds);
 if(minutes==24){
-  $("#Minutes").html("24")
+  $("#Minutes").html("24") // PROBABLY BUG LOOK BUG BUG BUG BUG BUG OR MAYBE NOT !!!
 }else{
   $("#Minutes").html("4")
 }
@@ -46,14 +46,14 @@ if(minutes+seconds == 0){
 function start(){
 //onOffSwitch = "on"; //this is the "on" switch. It redefines our clearInterval
 $("#Start-pause").html("Pause");
-idVar = setInterval(count,1000);
-status="on"
-console.log(status)
+idVar = setInterval(count,1000); //THIS LINE IS KEY LOOK HERE. we can't reference idVar as idVar(). We also can't ref as let idVar= setInterval. It HAS to redefinean existing....
+status="on"                      //..  let (i.e a variable). CANNOT create new Let, because the SCOPE is then BLOCK level and our pause() cannot reach it with onOffSwitch() anymore.
+console.log(status)               //Note to future self. Redefining at lock level is excellent. Re-DECLARING ruins scoping
 }
 
 function pause(){
 $("#Start-pause").html("Start")
-onOffSwitch();
+onOffSwitch(); //calls clearInterval with proper scope.
 //onOffSwitch = clearInterval(idVar);
  //clearInterval(idVar); //and the "Off" switch with the magic phrase... might need to actually call function. We'll see. ??????????????????
 console.log(idVar)
@@ -65,9 +65,9 @@ function reset(){
 minutes+=minPassed;
 seconds=60;
 $("#Minutes").html(minutes+1);
-setTimeout(function(){
-  $("#Minutes").html(minutes);
-},1000)
+// setTimeout(function(){  ///BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG this shouldnt be here it should timeout then add 1 start when it starts running!!!!!!!!!!!!
+//   $("#Minutes").html(minutes);
+// },1000)
 $("#Seconds").html("00");
 minPassed=0;
 secPassed=0;
@@ -76,7 +76,7 @@ pause(chime);
 
 function toggle(){
 reset();
-if(minutes>5){ //i.e if it's currently 25 after reset()
+if(minutes>6){ //i.e if it's currently 25 after reset()
   minutes=5;
 }
 else{
