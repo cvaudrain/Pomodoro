@@ -1,28 +1,23 @@
-/* About:
-Title: Pomodoro Timer Version 2.0
-Description: A customizable timer with 25/5 work/break cycles as suggested format.
-Front End: HTML, CSS, JavaScript, jQuery
-Back End: Node.js, Express.
-Owner: Chris Vaudrain
-*/
 //Global Variables
 var chime = new Audio("sounds/jazzhop.m4a")
-var minutes = 1;
+var minutes = 25;
 var seconds = 0;
 var minPassed = 0;
-var idVar = setInterval(count,200) //this runs the interval on count. needs to be global so that clear(idVar) can be called from anywhere
+var idVar = setInterval(count,1000) //runs the interval on count.
+
+//Functions
 function onOffSwitch(){
-  clearInterval(idVar) //will be called to halt idVar.
+  clearInterval(idVar) // to halt idVar.
 }
-onOffSwitch();//needs to be here or else counting starts on load.
+onOffSwitch();//Prevent setInterval on load.
 var status = "off";
 
-function count(){ //this increments and sets the clock accordingly.
+function count(){ // increments and sets the clock accordingly.
   console.log(minutes+":"+seconds)
   if(seconds==0){
     minutes -=1;
     minPassed+=1;
-    seconds = 60; //will be decremented prior to setting the HTML onscreen, so it will go from :00 to :59 smoothly.
+    seconds = 60;
     $("#Minutes").html(minutes);
   }
 seconds-=1;
@@ -38,13 +33,10 @@ if(minutes+seconds == 0){
                 }
 
 function start(){
-console.log(minutes+":"+seconds)
 if(minutes+seconds == 0){ return;}
 $("#Start-pause").html("Pause");
-idVar = setInterval(count,20); //THIS LINE IS KEY LOOK HERE. we can't reference idVar as idVar(). We also can't ref as let idVar= setInterval. It HAS to redefinean existing....
-status="on"                      //..  let (i.e a variable). CANNOT create new Let, because the SCOPE is then BLOCK level and our pause() cannot reach it with onOffSwitch() anymore.
-console.log(status)
-          //Note to future self. Redefining at lock level is excellent. Re-DECLARING ruins scoping
+idVar = setInterval(count,1000);
+status="on"
 }
 
 function pause(){
@@ -52,18 +44,13 @@ function pause(){
 if(minutes+seconds==0){return;}
 $("#Start-pause").html("Start")
 onOffSwitch(); //calls clearInterval with proper scope.
-//onOffSwitch = clearInterval(idVar);
- //clearInterval(idVar); //and the "Off" switch with the magic phrase... might need to actually call function. We'll see. ??????????????????
-console.log(idVar)
 status="off"
-console.log(status)
-
 }
 
 function reset(){
   pause();
 minutes+=minPassed;
-seconds=0; //TRYING
+seconds=0;
 $("#Minutes").html(minutes);
 $("#Seconds").html("00");
 minPassed=0;
@@ -71,12 +58,11 @@ secPassed=0;
 chime.pause();
 
 $("#Start-pause").html("Start")
-console.log("Reset: minutes ="+minutes)
 }
 
-function toggle(){
+function toggle(){ //toggles break and work timers
 reset();
-if(minutes>6){ //i.e if it's currently 25 after reset()
+if(minutes>6){
   minutes=5;
   $("#Toggle").html("Work")
 }
@@ -88,32 +74,13 @@ $("#Minutes").html(minutes);
 $("#Seconds").html("00");
 }
 
-function chimeTime(){ //I did this to practice chaining the short loop sound. Just as well to make the alarm file 3x as long lol
-  console.log(minutes+seconds)
+function chimeTime(){ //alarm sound
   chime.play();
-//    setTimeout(function(){
-//     console.log("timeout begun success")
-//   if(minutes+seconds==0){
-// chime.play();
-// }
-// setTimeout(function(){
-//  console.log("timeout 2 begun success")
-// if(minutes+seconds==0){
-// chime.play();
-// }
-// setTimeout(function(){
-//  console.log("timeout 3 begun success")
-// if(minutes+seconds==0){
-// chime.play();
-// }
-// },10600)
-// },10600)
-// },10600)
 }
 
-
-//
 //Event Listeners
+$(document).ready(function(){ //await page load
+
 $("#Start-pause").click(function(){
   if(status=="on"){
 pause();
@@ -123,10 +90,6 @@ else if(status =="off"){
 }
 });
 
-// $("#Pause").click(function(){
-//
-// });
-
 $("#Toggle").click(function(){
 toggle();
 });
@@ -134,4 +97,5 @@ toggle();
 $("#Reset").click(function(){
 reset();
 });
-//
+
+})
